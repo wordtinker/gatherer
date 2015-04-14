@@ -72,7 +72,7 @@ for row in c.execute('SELECT rowid, project, link FROM articles WHERE visited=0'
     if not os.path.exists(prj_dir):
         os.makedirs(prj_dir)
     if word_count >= MIN_WORDS:
-        with open(os.path.join(prj_dir, str(id) + '.txt'), mode='w') as f:
+        with open(os.path.join(prj_dir, str(id) + '.txt'), mode='w', encoding='utf-8') as f:
             f.write(article)
     c.execute('''UPDATE articles
      SET visited=1
