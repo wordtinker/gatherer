@@ -8,22 +8,24 @@ import os
 
 from walla import *
 from guardian import *
+from register import *
 
-MIN_WORDS = 800  # Minimum number of words in the article
-
+MIN_WORDS = 40  # Minimum number of words in the article
 PROJECT2OBJ = {
     'Walla': Walla,
-    'Guardian': Guardian
+    'Guardian': Guardian,
+    'Register': Register
 }
 
 PROJECTS = (
-    {'site': 'Walla', 'section': '/category/2689'},  # Army and Safety
-    {'site': 'Walla', 'section': '/category/2686'},  # Politics
-    {'site': 'Walla', 'section': '/category/1'},  # Country
-    {'site': 'Walla', 'section': '/category/2'},  # World
-    {'site': 'Walla', 'section': '/category/5700'},  # Science
-    {'site': 'Walla', 'section': '/category/4996'},  # Religion
+    # {'site': 'Walla', 'section': '/category/2689'},  # Army and Safety
+    # {'site': 'Walla', 'section': '/category/2686'},  # Politics
+    # {'site': 'Walla', 'section': '/category/1'},  # Country
+    # {'site': 'Walla', 'section': '/category/2'},  # World
+    # {'site': 'Walla', 'section': '/category/5700'},  # Science
+    # {'site': 'Walla', 'section': '/category/4996'},  # Religion
     {'site': 'Guardian', 'section': '/uk-news'},  # UK-news
+    {'site': 'Register', 'section': ''},
 )
 
 
@@ -48,7 +50,7 @@ h = httplib2.Http('.cache')
 # Gather new links from the pages
 for description in PROJECTS:
     project = create_project(description['site'], description['section'])
-    resp_headers, content = h.request(project.main_page, 'GET')
+    _, content = h.request(project.main_page, 'GET')
     content = content.decode(project.encoding)
     available_links = project.parse_page(content)
     for link in available_links:
@@ -63,7 +65,7 @@ for row in c.execute('SELECT rowid, project, link FROM articles WHERE visited=0'
 
     print("Going to parse {}".format(page))
     project = create_project(site, '')
-    resp_headers, content = h.request(page, 'GET')
+    _, content = h.request(page, 'GET')
     content = content.decode(project.encoding)
     article = project.parse_link(content)
     word_count = len(article.split())

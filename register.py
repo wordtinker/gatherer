@@ -1,17 +1,19 @@
 from bs4 import BeautifulSoup
 
 
-class Guardian:
+class Register:
 
     def parse_link(self, content):
         soup = BeautifulSoup(content)
-        name = soup.select('div.content__standfirst')
-        if len(name) > 0:
-            name = name[0].get_text()
+        name = soup.find("div", {"class": "article_head"})
+        if name:
+            name = name.find("h1")
+        if name:
+            name = name.getText()
         else:
             name = ''
 
-        paragraphs = soup.select('div.content__article-body p')
+        paragraphs = soup.select('div.body p')
         text = name + '\n'
         for p in paragraphs:
             text += p.get_text()
@@ -20,12 +22,13 @@ class Guardian:
 
     def parse_page(self, content):
         soup = BeautifulSoup(content)
-        links = soup.select('a.fc-item__link')
-        return [link['href'] for link in links]
+        links = soup.select('a.story_link')
+        return [link['href'] for link in links if "www.theregister.co.uk"
+                in link['href']]
 
     def __init__(self, section):
-        self.name = 'Guardian'
-        self.__basepage = 'http://www.theguardian.com'
+        self.name = 'Register'
+        self.__basepage = 'http://www.theregister.co.uk/'
         self.main_page = self.__basepage + section
         self.encoding = 'UTF8'
         self.lang = "english"
