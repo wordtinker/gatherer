@@ -13,7 +13,7 @@ class Register:
         else:
             name = ''
 
-        paragraphs = soup.select('div.body p')
+        paragraphs = soup.select('div#body p')
         text = name + '\n'
         for p in paragraphs:
             text += p.get_text()

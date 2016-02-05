@@ -10,7 +10,7 @@ from walla import *
 from guardian import *
 from register import *
 
-MIN_WORDS = 40  # Minimum number of words in the article
+MIN_WORDS = 300  # Minimum number of words in the article
 PROJECT2OBJ = {
     'Walla': Walla,
     'Guardian': Guardian,
